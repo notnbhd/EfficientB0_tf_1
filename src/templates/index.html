@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Classifier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2ecc71;
+            --secondary-dark: #27ae60;
+            --text: #333;
+            --light-text: #777;
+            --light-bg: #f8f9fa;
+            --border: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 630px;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .model-info {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+        
+        .model-info h3 {
+            font-size: 16px;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        
+        .model-info p {
+            font-size: 14px;
+            color: var(--light-text);
+        }
+        
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .category {
+            background-color: var(--light-bg);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .upload-zone i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .upload-zone h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .upload-zone p {
+            color: var(--light-text);
+            font-size: 14px;
+        }
+        
+        input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .btn-classify {
+            background: linear-gradient(to right, var(--secondary), var(--secondary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-classify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-classify:active {
+            transform: translateY(0);
+        }
+        
+        .selected-file {
+            display: none;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: var(--light-bg);
+            border-radius: var(--radius);
+            font-size: 14px;
+            color: var(--text);
+        }
+        
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: var(--light-text);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Image Classifier</h1>
+        </div>
+        
+        <div class="content">
+            <div class="model-info">
+                <h3>About this model</h3>
+                <p></p>
+            </div>
+            
+            <div class="categories">
+                <span class="category"></span>
+            </div>
+            
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <div class="upload-zone" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Upload your image</h3>
+                    <p>Click or drag & drop your image here</p>
+                    <input type="file" name="image" id="imageInput" accept="image/*" required>
+                </div>
+                
+                <div class="selected-file" id="selectedFile">
+                    No file selected
+                </div>
+                
+                <button type="submit" class="btn-classify">
+                    <i class="fas fa-robot"></i>
+                    Classify Image
+                </button>
+            </form>
+        </div>
+        
+        <div class="footer">
+            Powered by PyTorch and Flask 
+            <br>
+            @notnbhd
+        </div>
+    </div>
+    
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const selectedFile = document.getElementById('selectedFile');
+        const dropZone = document.getElementById('dropZone');
+        
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                selectedFile.textContent = `Selected: ${this.files[0].name}`;
+                selectedFile.style.display = 'block';
+            }
+        });
+        
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        // Highlight drop zone when item is dragged over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+        
+        // Handle dropped files
+        dropZone.addEventListener('drop', handleDrop, false);
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        function highlight() {
+            dropZone.style.borderColor = '#3498db';
+            dropZone.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
+        }
+        
+        function unhighlight() {
+            dropZone.style.borderColor = '#e0e0e0';
+            dropZone.style.backgroundColor = 'white';
+        }
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files && files[0]) {
+                imageInput.files = files;
+                selectedFile.textContent = `Selected: ${files[0].name}`;
+                selectedFile.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
