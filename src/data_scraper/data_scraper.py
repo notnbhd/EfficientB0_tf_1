@@ -22,9 +22,8 @@ def setup_directories(base_dir, query):
 
 def search_images_google_api(query, num_images=100, api_key=None, search_engine_id=None):
     """Search for images using Google Custom Search API"""
-    # Replace with your actual API key and search engine ID if not provided
-    api_key = api_key or "AIzaSyDRortcskNstzFPQRVRG3GIQlKdtAc9T_I"
-    search_engine_id = search_engine_id or "d5c6cd0270f4d4cd8"
+    api_key = api_key or "***"
+    search_engine_id = search_engine_id or "***"
     GOOGLE_SEARCH_API_URL = "https://www.googleapis.com/customsearch/v1"
     
     image_urls = []
