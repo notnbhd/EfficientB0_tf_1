@@ -212,7 +212,7 @@
                     <div class="confidence-bar">
                         <div class="confidence-level"></div>
                     </div>
-                    <div class="prediction-label">Model confidence: 90.1% overall accuracy</div>
+                    <div class="prediction-label">Model confidence: 95.7% overall accuracy</div>
                 </div>
                 
                 <div class="buttons">
@@ -241,7 +241,7 @@
             e.preventDefault();
             
             // Create a text version of the result
-            const resultText = `Classification Result\n\nPrediction: {{ prediction }}\nConfidence: 90.1% (model accuracy)`;
+            const resultText = `Classification Result\n\nPrediction: {{ prediction }}\nConfidence: 95.7% (model accuracy)`;
             
             // Create a Blob and download link
             const blob = new Blob([resultText], { type: 'text/plain' });
