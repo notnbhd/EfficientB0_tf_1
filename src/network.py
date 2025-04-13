@@ -1,13 +1,11 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
-import os
-
 
 
 def image_classify(img):
     model = torchvision.models.efficientnet_b0(weights='DEFAULT')
-    class_names = ['sushi', 'pizza', 'steak']
+    class_names = ['pho', 'ramen', 'spaghetti_carbonara']
     model.classifier = torch.nn.Sequential(
         torch.nn.Dropout(p=0.2, inplace=True),
         torch.nn.Linear(in_features=1280, out_features=len(class_names), bias=True)

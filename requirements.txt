@@ -1,0 +1,8 @@
+torch
+torchvision
+flask
+Pillow
+tqdm
+torchinfo
+matplotlib
+requests
