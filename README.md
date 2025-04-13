@@ -1,9 +1,31 @@
-Developed and trained a deep learning image classifier using PyTorch and EfficientNet-B0 architecture, leveraging transfer learning and fine-tuning techniques to achieve high accuracy on a custom food image dataset (e.g., noodles, sushi/pizza/steak).
+1. Clone the repo:
+    git clone https://github.com/notnbhd/EfficientB0_tf_1
 
-Engineered an end-to-end ML pipeline: encompassing data acquisition (Food101 subsetting/optional web scraping), preprocessing (augmentation, normalization via torchvision.transforms), custom training/validation loops, and evaluation (accuracy ~95.7%).
+2. Create and activate a virtual environment (recommended):
+    python -m venv .venv
 
-Implemented robust training strategies: including learning rate scheduling (ReduceLROnPlateau) and early stopping based on validation accuracy to prevent overfitting and optimize model performance.
+3. Install dependencies:
+    pip install -r requirements.txt
 
-Deployed the trained classification model into a user-friendly web application using Flask, enabling real-time image uploads and predictions through a simple interface.
+4. Build model:
+    run main.ipynb 
+        or model_builder.py
+    * note: if you use the notebook, you are gonna need to run the create_data.ipynb in data_creation first.
+    
+    -- when the training process finished, 'best_model.pth' file will be generated.
 
-Managed model lifecycle: including saving the best performing model weights (torch.save), loading them for inference (torch.load), and structuring code for reproducible training and deployment (network.py, app.py).
+5. run the web application:
+    - run app.py file.
+
+    - open your web browser and navigate to http://127.0.0.1:5000 (or the address provided in the terminal output).
+
+    - **Upload an image** using the form.
+    - Click **"Classify Image"**.
+      The application will display the uploaded image and the predicted food class based on the model loaded in `network.py`.
+
+## Model Details
+
+*   **Architecture:** EfficientNet-B0 (using`torchvision.models`)
+*   **Approach:** Transfer Learning (freezing most base layers, fine-tuning later layers and the classifier).
+*   **Dataset:** Subset of Food101 (Pho, Ramen, Spaghetti Carbonara)
+    * note: i builded a image scraper using googl search api but it doesn not work well yet.
