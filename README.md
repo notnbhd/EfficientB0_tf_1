@@ -28,4 +28,4 @@
 *   **Architecture:** EfficientNet-B0 (using`torchvision.models`)
 *   **Approach:** Transfer Learning (freezing most base layers, fine-tuning later layers and the classifier).
 *   **Dataset:** Subset of Food101 (Pho, Ramen, Spaghetti Carbonara)
-    * note: i builded a image scraper using googl search api but it doesn not work well yet.
+    * note: i builded a image scraper using google search api but it does not work well yet.
